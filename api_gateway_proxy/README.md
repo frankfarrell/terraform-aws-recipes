@@ -13,7 +13,7 @@ This module can be used in two ways:
 
 ```
 module "api_gateway" {
-  source = "github.com/frankfarrell/terraform-aws-recipes//api-gateway//api-gateway-proxy"
+  source = "github.com/frankfarrell/terraform-aws-recipes//api_gateway_proxy//api_gateway_proxy"
 }
 ```
 
@@ -46,7 +46,7 @@ Attributes required:
 
 ```
 module "api_gateway" {
-  source = "github.com/frankfarrell/terraform-aws-recipes//api-gateway//api-gateway-proxy//proxy"
+  source = "github.com/frankfarrell/terraform-aws-recipes//api_gateway_proxy//api_gateway_proxy//proxy"
 }
 ```
 
