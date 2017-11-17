@@ -1,11 +1,12 @@
 variable "region" {}
 variable "lambda_function_name" {}
-variable "gateway_lambda_execution_role_arn" {}variable "account_id" {}
+variable "gateway_lambda_execution_role_arn" {}
+variable "account_id" {}
 variable "stage"{}
 variable "parent_id" {}
 variable "api_id" {}
 
-variable "api_method" {
+variable "api_methods" {
   type = "list"
   default = ["GET"]
 } #eg ['POST', 'GET']
@@ -24,16 +25,16 @@ resource "aws_api_gateway_resource" "resource" {
 }
 
 resource "aws_api_gateway_method" "method" {
-  count =  "${length(var.api_method)}"
+  count =  "${length(var.api_methods)}"
   rest_api_id = "${var.api_id}"
   resource_id = "${aws_api_gateway_resource.resource.id}"
-  http_method = "${element(var.api_method, count.index)}"
+  http_method = "${element(var.api_methods, count.index)}"
   authorization = "NONE"
   api_key_required = "${var.api_key_required}"
 }
 
 resource "aws_api_gateway_integration" "integration" {
-  count = "${length(var.api_method)}"
+  count = "${length(var.api_methods)}"
   rest_api_id = "${var.api_id}"
   resource_id = "${aws_api_gateway_resource.resource.id}"
   http_method = "${element(aws_api_gateway_method.method.*.http_method, count.index)}"
@@ -46,7 +47,7 @@ resource "aws_api_gateway_integration" "integration" {
 }
 
 resource "aws_api_gateway_method_response" "response_codes" {
-  count = "${length(var.response_codes) * length(var.api_method)}"
+  count = "${length(var.response_codes) * length(var.api_methods)}"
   rest_api_id = "${var.api_id}"
   resource_id = "${aws_api_gateway_resource.resource.id}"
   http_method = "${element(aws_api_gateway_method.method.*.http_method, count.index)}"

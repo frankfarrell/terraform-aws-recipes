@@ -21,8 +21,14 @@ variable "region" {
 # In the case of an aliased function, it must be functionName:alias
 variable "lambda_function_name" {}
 variable "gateway_lambda_execution_role_arn" {}
-variable "api_methods" {}
-variable "response_codes" {}
+variable "api_methods" {
+  type = "list"
+  default = ["GET"]
+} #eg ['POST', 'GET']
+variable "response_codes" {
+  type = "list"
+  default = ["200", "500"]
+} #eg ["201", "400", "403", "404", "500"]
 
 # If true the output will be passed as an output
 variable "create_api_key" {
@@ -71,7 +77,7 @@ module "proxy" {
   stage           = "${var.stage_name}"
   parent_id       = "${aws_api_gateway_rest_api.api.root_resource_id}"
   api_id          = "${aws_api_gateway_rest_api.api.id}"
-  api_method      = "${var.api_methods}"
+  api_methods      = "${var.api_methods}"
   response_codes  = "${var.response_codes}"
   api_key_required = "${var.create_api_key}"
 }
@@ -80,7 +86,7 @@ module "proxy" {
 # https://github.com/hashicorp/terraform/issues/953
 resource "aws_api_gateway_api_key" "api_key" {
   count           = "${var.create_api_key}"
-  name          = "api-key"
+  name          = "${var.api_name}-${var.stage_name}-api-key"
   description   = "API Key for to access endpoints"
 }
 
@@ -95,7 +101,7 @@ resource "aws_api_gateway_usage_plan_key" "usage_plan_key" {
 resource "aws_api_gateway_usage_plan" "usage_plan" {
   count           = "${var.create_api_key}"
   depends_on      = ["aws_api_gateway_deployment.deployment"]
-  name          = "usage-plan"
+  name          = "${var.api_name}-${var.stage_name}-usage-plan"
   description   = "Description here"
 
   api_stages {
