@@ -40,7 +40,8 @@ Attributes required:
     }
 5. api_methods => list of methods, default is GET
 6. response codes => list of response, default is 200 & 500
-7. create_api_key -> whether it should create a usage plan and api key
+7. create_api_key => whether it should create a usage plan and api key
+8. path => The path of your api. If not specified, it defaults to {proxy+}, which passes through on all paths.
 
 ## 2 Intergate a proxy gateway endpoint into an existing api gateway
 

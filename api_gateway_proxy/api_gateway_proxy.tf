@@ -34,6 +34,9 @@ variable "response_codes" {
 variable "create_api_key" {
   default = false
 }
+variable "path" {
+  default = "{proxy+}"
+}
 
 output "api_url" {
   value = "${aws_api_gateway_deployment.deployment.invoke_url}"
@@ -80,6 +83,7 @@ module "proxy" {
   api_methods      = "${var.api_methods}"
   response_codes  = "${var.response_codes}"
   api_key_required = "${var.create_api_key}"
+  path            = "${var.path}"
 }
 
 # Ideally following would be in a module, but TF doesnt support count on modules:

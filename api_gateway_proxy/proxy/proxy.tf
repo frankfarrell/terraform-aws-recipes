@@ -5,6 +5,9 @@ variable "account_id" {}
 variable "stage"{}
 variable "parent_id" {}
 variable "api_id" {}
+variable "path" {
+  default = "{proxy+}"
+}
 
 variable "api_methods" {
   type = "list"
@@ -21,7 +24,7 @@ variable "api_key_required" {
 resource "aws_api_gateway_resource" "resource" {
   rest_api_id = "${var.api_id}"
   parent_id = "${var.parent_id}"
-  path_part = "{proxy+}"
+  path_part = "${var.path}"
 }
 
 resource "aws_api_gateway_method" "method" {
