@@ -4,17 +4,17 @@ variable "target_utilization" {
   default = 0.7
 }
 variable table_name {}
-variable dynamo_autoscale_role_arn {}
 variable type {
   default = "READ"
   description = "Options are READ or WRITE"
 }
+variable account_id {}
 
 resource "aws_appautoscaling_target" "dynamodb_table_target" {
   max_capacity       = "${var.max_capacity}"
   min_capacity       = "${var.min_capacity}"
   resource_id        = "table/${var.table_name}"
-  role_arn           = "${var.dynamo_autoscale_role_arn}"
+  role_arn           = "arn:aws:iam::${var.account_id}:role/aws-service-role/dynamodb.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_DynamoDBTable"
   scalable_dimension = "dynamodb:table:${var.type == "READ" ? "ReadCapacityUnits" : "WriteCapacityUnits"}"
   service_namespace  = "dynamodb"
 }
@@ -32,7 +32,7 @@ resource "aws_appautoscaling_policy" "dynamodb_table_policy" {
       predefined_metric_type = "DynamoDB${var.type == "READ" ? "Read" : "Write"}CapacityUtilization"
     }
 
-    # Trick to get terraform interpolation to work with floats
+    # Trick to get terraform interpolation to wor
     target_value = "${ 1.0 * var.max_capacity *  (1.0 * var.target_utilization)  }"
   }
 }

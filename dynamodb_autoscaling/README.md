@@ -6,10 +6,11 @@
 2. min_capacity
 3. target_utilization: default = 0.7
 4. table_name 
-5. dynamo_autoscale_role_arn 
+5. account_id
 6. type : Options are READ or WRITE, default is READ
 
 ## Use: 
+
 ```
 module "api_gateway" {
     source = "github.com/frankfarrell/terraform-aws-recipes//dynamodb_autoscaling"
@@ -17,7 +18,7 @@ module "api_gateway" {
     min_capacity =5
     target_utilization = 0.7
     table_name = "my-dynamo-table"
-    dynamo_autoscale_role_arn = "IAM role arn that is allowed to configure dynamo table capacity" 
+    account_id = "1234" # It uses account id because custom roles are ignored and it is always set as this
     type = "READ"
 }
 ```
