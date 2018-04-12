@@ -21,7 +21,7 @@ resource "aws_appautoscaling_target" "dynamodb_table_target" {
 
 
 resource "aws_appautoscaling_policy" "dynamodb_table_policy" {
-  name               = "DynamoDBReadCapacityUtilization:${aws_appautoscaling_target.dynamodb_table_target.resource_id}"
+  name               = "DynamoDB${var.type == "READ" ? "Read" : "Write"}CapacityUtilization:${aws_appautoscaling_target.dynamodb_table_target.resource_id}"
   policy_type        = "TargetTrackingScaling"
   resource_id        = "${aws_appautoscaling_target.dynamodb_table_target.resource_id}"
   scalable_dimension = "${aws_appautoscaling_target.dynamodb_table_target.scalable_dimension}"
@@ -32,6 +32,7 @@ resource "aws_appautoscaling_policy" "dynamodb_table_policy" {
       predefined_metric_type = "DynamoDB${var.type == "READ" ? "Read" : "Write"}CapacityUtilization"
     }
 
-    target_value = "${var.target_utilization * var.max_capacity}"
+    # Trick to get terraform interpolation to work with floats
+    target_value = "${ 1.0 * var.max_capacity *  (1.0 * var.target_utilization)  }"
   }
 }
