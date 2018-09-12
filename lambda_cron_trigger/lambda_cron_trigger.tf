@@ -24,8 +24,9 @@ variable month {
   default = "*"
   description = "1-12 or JAN-DEC - * / "
 }
+# You can't specify the Day-of-month and Day-of-week fields in the same cron expression. If you specify a value (or a *) in one of the fields, you must use a ? (question mark) in the other.
 variable day_of_week {
-  default = "*"
+  default = "?"
   description = "1-7 or SUN-SAT - * ? / L # "
 
 }
