@@ -33,6 +33,6 @@ resource "aws_appautoscaling_policy" "dynamodb_table_policy" {
     }
 
     # Trick to get terraform interpolation to wor
-    target_value = "${ 1.0 * var.max_capacity *  (1.0 * var.target_utilization)  }"
+    target_value = "${1.0 * var.target_utilization}"
   }
 }
