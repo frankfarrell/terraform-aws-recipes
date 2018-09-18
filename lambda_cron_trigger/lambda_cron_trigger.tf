@@ -47,7 +47,7 @@ resource "aws_cloudwatch_event_target" "triger_new_table_end_of_month" {
   arn = "${var.lambda_arn}"
 }
 
-resource "aws_lambda_permission" "allow_cloudwatch_to_call_dynamo_partitioning_lambda" {
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_lambda_function" {
   statement_id = "AllowExecutionFromCloudWatch-${var.unique_identifier}"
   action = "lambda:InvokeFunction"
   function_name = "${var.lambda_arn}"
